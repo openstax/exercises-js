@@ -290,11 +290,91 @@ input[type='text'] { width: 200px; }
   [data-math] { background-color: #eee; display: inline-block; margin: 1px; cursor: pointer; }
   [data-math]:hover { border: 1px solid #3cc; margin: 0; }
   .ql-active { font-weight: bold; }
-  .update.disabled { color: gray; }
-  .ql-tooltip {
-    padding: 5px 10px;
-    box-shadow: 0 6px 15px 0 rgba(0,0,0,0.2),0 4px 10px 0 rgba(0,0,0,.1);
+
+
+  // Style the Math Popup
+
+  // Style the tooltip and buttons
+  .ql-math-tooltip {
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid #999;
+    width: 25rem;
+    overflow-x: hidden;
+
+
+    .title {
+      color: #9e9e9e;
+      margin-right: 1rem;
+    }
+    .math-input {
+      border: 1px solid black;
+      width: 17rem;
+      height: 2rem;
+      padding-left: .5rem;
+    }
+    .preview {
+      color: #616161;
+      margin: 5px auto;
+      width: 20rem;
+      text-align: center;
+      cursor: default;
+    }
+    .ql-btn-group {
+      border-top: 1px solid rgba(160,160,160,0.2); // from card-action-top
+
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: .5rem;
+    }
   }
-  .ql-tooltip.ql-math-tooltip .math-input { width: 200px; }
+
+  .ql-math-tooltip {
+
+    .cancel,
+    .update,
+    .remove {
+      display: inline-block;
+      margin-bottom: 0;
+      font-weight: normal;
+      text-align: center;
+      vertical-align: middle;
+      touch-action: manipulation;
+      cursor: pointer;
+      background-image: none;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.428571429;
+      border-radius: 4px;
+
+      // Extra small
+      padding: 1px 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+
+      &.disabled {
+        pointer-events: none;
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: .65;
+      }
+    }
+
+    .remove,
+    .cancel {
+      color: #333333;
+      background-color: #ffffff;
+      border-color: #cccccc;
+    }
+    .update {
+      color: #ffffff;
+      background-color: #337ab7;
+      border-color: #2e6da4;
+    }
+  }
 
 }
