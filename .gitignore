@@ -1,3 +1,10 @@
 /node_modules
-/bower_components
+/bower_components/jquery/src/
+/bower_components/materialize/js/
+/bower_components/materialize/sass/
+/bower_components/materialize/font/
+/bower_components/loader/
+/bower_components/font-awesome/scss/
+/bower_components/font-awesome/less/
+/bower_components/bootstrap/
 /.build

@@ -221,12 +221,15 @@ nav .nav-wrapper .btn-flat {
   height: initial;
   padding: 0;
 }
-.card.question.mode-edit .answers-answer.answer-new:not(:hover) .answer-letter:before {
+.card.question.mode-edit .answers-answer.answer-new:not(:hover) .answer-letter:after {
   color: rgba(0, 0, 0, 0);
 }
 .card.question.mode-edit .answers-answer.answer-new .answer-content {
-  color: #ccc;
   cursor: pointer;
+}
+.card.question.mode-edit .answers-answer.answer-new .answer-content:not(:hover) {
+  color: #ccc !important;
+  /*important because .green-text has it too */
 }
 .card.question.mode-preview .answer-input-box {
   display: none;

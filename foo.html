@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="./style.css"/>
+    <script src="./bower_components/jquery/dist/jquery.js"></script>
+    <script src="./bower_components/materialize/dist/js/materialize.js"></script>
+  </head>
+  <body>
+
+     <div class="row">
+        <div class="col m5">
+
+          <!-- Exercise Background -->
+          <div class="card card-background mode-view">
+            <div class="card-action">
+              <button class="btn-dialog green-text">Add Background</button>
+            </div>
+          </div>
+
+          <div class="card card-background mode-view">
+            <div class="card-content">
+              Some background information for all questions in an exercise
+            </div>
+            <div class="card-action">
+              <button class="btn-dialog green-text">Edit Background</button>
+              <button class="btn-dialog btn-dialog-danger right"><i class="fa fa-trash-o"></i></button>
+            </div>
+          </div>
+
+          <!-- Question View -->
+          <div class="card card-question mode-view">
+            <div class="card-content">
+              <p class="question-stem">I am a long question. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.
+              I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.</p>
+
+
+              <!-- Question Answers -->
+              <div class="row"><div class="col s12">
+                <div class="answers-table">
+                  <div class="answers-answer">
+                    <div class="answer-letter">a)</div>
+                    <div class="answer-content"><div>42</div></div>
+                  </div><!-- answers-answer -->
+                  <div class="answers-answer">
+                    <div class="answer-letter">b)</div>
+                    <div class="answer-content"><div>4</div></div>
+                  </div><!-- answers-answer -->
+                  <div class="answers-answer">
+                    <div class="answer-letter">c)</div>
+                    <div class="answer-content"><div>Unladen<br/>swallow (multiline)</div></div>
+                  </div><!-- answers-answer -->
+                </div><!-- answers-table -->
+              </div></div><!-- row -->
+
+
+            </div>
+            <div class="card-action">
+              <button class="btn-dialog green-text">Edit</button>
+              <button class="btn-dialog btn-dialog-danger right"><i class="fa fa-trash-o"></i></button>
+            </div>
+          </div>
+
+          <!-- Question Edit -->
+          <div class="card card-question mode-edit">
+
+            <!-- Toolbar -->
+            <nav class="double-height green">
+              <div class="nav-wrapper">
+                <!-- Row 1 -->
+                <div class="col s12">
+                  <span class="brand-logo question-toolbar-title">Edit Question</span>
+                  <ul class="side-nav">
+                    <li><button class="btn-flat"><i class="mdi-navigation-close"></i></button></li>
+                  </ul>
+                </div>
+                <!-- Row 2 -->
+                <div class="header-row-2 col s12">
+                  <button class="btn-toolbar"><i class="mdi-editor-format-bold"></i></button>
+                  <button class="btn-toolbar ql-active"><i class="mdi-editor-format-italic"></i></button>
+                  <button class="btn-toolbar"><i class="mdi-editor-format-list-bulleted"></i></button>
+                  <button class="btn-toolbar"><i class="mdi-editor-format-list-numbered"></i></button>
+                  <button class="btn-toolbar">x<sup>y</sup></button>
+                </div>
+              </div>
+            </nav>
+
+            <div class="card-content">
+              <div class="row"><div class="col s12">
+                <!-- Question Stem -->
+                <label class="contenteditable-label">Question Stem</label>
+                <div id="question-stem" contenteditable="true">I am a very simple card. I am good at containing small bits of information.
+                  <br/>
+                  I am convenient because I require little markup to use effectively.</div>
+              </div></div><!-- row -->
+
+              <!-- Question Answers -->
+              <div class="row"><div class="col s12">
+                <label class="contenteditable-label">Answer Options</label>
+                <div class="answers-table">
+                  <div class="answers-answer">
+                    <div class="answer-letter">a)</div>
+                    <div class="answer-content"><div contenteditable="true">42</div></div>
+                    <div class="answer-actions">
+                      <button class="btn-dialog btn-dialog-danger"><i class="fa fa-trash-o"></i></button>
+                    </div>
+                  </div><!-- answers-answer -->
+                  <div class="answers-answer">
+                    <div class="answer-letter">b)</div>
+                    <div class="answer-content"><div contenteditable="true">4</div></div>
+                    <div class="answer-actions">
+                      <button class="btn-dialog btn-dialog-danger"><i class="fa fa-trash-o"></i></button>
+                    </div>
+                  </div><!-- answers-answer -->
+                  <div class="answers-answer">
+                    <div class="answer-letter">c)</div>
+                    <div class="answer-content"><div contenteditable="true">Unladen<br/>swallow (multiline)</div></div>
+                    <div class="answer-actions">
+                      <button class="btn-dialog btn-dialog-danger"><i class="fa fa-trash-o"></i></button>
+                    </div>
+                  </div><!-- answers-answer -->
+                  <div class="answers-add">
+                    <div class="answer-letter">d)</div>
+                    <div class="answer-content answer-content-empty"><div contenteditable="true">Add a new Answer</div></div>
+                  </div><!-- answers-answer -->
+                </div><!-- answers-table -->
+              </div></div><!-- row -->
+
+
+            </div><!-- card-content -->
+
+            <div class="card-action">
+              <button class="btn-dialog green-text">Cancel</button>
+              <button class="btn-dialog green-text">Done</button>
+            </div>
+          </div><!-- card -->
+
+
+          <div class="card card-question mode-view">
+            <div class="card-content">
+              <p class="question-stem">I am a short question stem.</p>
+              <p>Something that occurs after the stem</p>
+            </div>
+            <div class="card-action">
+              <button class="btn-dialog green-text">Edit</button>
+              <button class="btn-dialog btn-dialog-danger right"><i class="fa fa-trash-o"></i></button>
+            </div>
+          </div><!-- card -->
+
+
+        </div><!-- cards row -->
+      </div>
+  </body>
+</html>

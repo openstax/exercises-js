@@ -11,51 +11,31 @@ window.ExerciseStore = ExerciseStore
 window.EXERCISE_MODES = EXERCISE_MODES
 window.logout = -> ExerciseActions.changeExerciseMode(EXERCISE_MODES.VIEW)
 
-# Determine if the user is logged in first
-ajax {type:'GET', url: '/api/user'}, (err, xhr) ->
+ExerciseActions.changeExerciseMode(EXERCISE_MODES.EDIT)
+url = "/test/example.json"
 
-  isLoggedIn = !err
-  if isLoggedIn
-    ExerciseActions.changeExerciseMode(EXERCISE_MODES.EDIT)
-  else
-    ExerciseActions.changeExerciseMode(EXERCISE_MODES.VIEW)
+# fetch the exercise JSON
+options =
+  url: url
+  type: 'GET'
 
-  # ExerciseActions.changeExerciseMode(EXERCISE_MODES.VIEW)
+ajax options, (err, xhr) ->
+  alert('Problem getting exercise') if err
 
-  # Determine the URL to use based on the browser location
-  if /\/exercises\/\d+/.test(window.location.pathname)
-    url = "/api#{window.location.pathname}"
+  # Success!
+  config = JSON.parse(xhr.responseText)
+  # Make sure all questions have ids
+  idCounter = 0
+  for question in config.questions or []
+    question.id = "auto-#{idCounter++}" unless question.id
 
-    # fetch the exercise JSON
-    options =
-      url: url
-      type: 'GET'
+  root = document.createElement('div')
+  root.id = 'exercise'
+  document.body.appendChild(root)
 
-    ajax options, (err, xhr) ->
-      alert('Problem getting exercise') if err
+  React.renderComponent(Exercise({config}), root)
 
-      # Success!
-      config = JSON.parse(xhr.responseText)
-      # Make sure all questions have ids
-      idCounter = 0
-      for question in config.questions or []
-        question.id = "auto-#{idCounter++}" unless question.id
+  # Save on every change
+  ExerciseStore.addChangeListener ->
 
-      root = document.createElement('div')
-      root.id = 'exercise'
-      document.body.appendChild(root)
-
-      React.renderComponent(Exercise({config}), root)
-
-      # Save on every change
-      ExerciseStore.addChangeListener ->
-
-        options =
-          url: url
-          type: 'PUT'
-          data: JSON.stringify(config)
-          processData: false
-          contentType: 'application/json'
-
-        ajax options, (err, value) ->
-          console.log('Save Response:', arguments...)
+    console.log('Fake Saving')

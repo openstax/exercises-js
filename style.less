@@ -236,8 +236,9 @@ width: 2rem;
 
     .answers-answer.answer-new {
       // Show the letter right before you click to add a new answer
-      &:not(:hover) .answer-letter:before { color: rgba(0,0,0,0); }
-      .answer-content { color: #ccc; cursor: pointer; }
+      &:not(:hover) .answer-letter:after { color: rgba(0,0,0,0); }
+      .answer-content { cursor: pointer; }
+    .answer-content:not(:hover) { color: #ccc !important; /*important because .green-text has it too */ }
     }
   }
 

@@ -176,7 +176,7 @@ Edit = React.createClass
         {answers}
         <div className="answers-answer answer-new" onClick={@onNewAnswer}>
           <div className="answer-letter"></div>
-          <div className="answer-content">Add a new Answer</div>
+          <div className="btn-dialog green-text answer-content">Add Answer</div>
           <div className="answer-actions">
           </div>
         </div>
