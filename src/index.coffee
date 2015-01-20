@@ -12,7 +12,7 @@ window.EXERCISE_MODES = EXERCISE_MODES
 window.logout = -> ExerciseActions.changeExerciseMode(EXERCISE_MODES.VIEW)
 
 ExerciseActions.changeExerciseMode(EXERCISE_MODES.EDIT)
-url = "/test/example.json"
+url = "./test/example.json"
 
 # fetch the exercise JSON
 options =
