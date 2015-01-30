@@ -40,17 +40,12 @@ buildBrowserify = (srcPath, destDir, destFile, isWatching) ->
 
 build = (isWatching)->
   destDir = './'
-  destDirCss = './dist'
   destDirFonts = './dist/fonts'
 
   destFile = './dist/exercises.js'
   srcPath = './src/index.coffee'
   buildBrowserify(srcPath, destDir, destFile, isWatching)
   .on 'end', ->
-    # Build the CSS file
-    gulp.src('./style/exercises.less')
-    .pipe(less())
-    .pipe(gulp.dest(destDirCss))
 
     gulp.src('bower_components/**/*.{eot,svg,ttf,woff}')
     .pipe(gulp.dest(destDirFonts))
@@ -62,6 +57,12 @@ buildTests = (isWatching) ->
   srcPath = './test/all-tests.coffee'
   buildBrowserify(srcPath, destDir, destFile, isWatching)
 
+gulp.task 'styles', ->
+  destDirCss = './dist'
+  # Build the CSS file
+  gulp.src('./style/exercises.less')
+  .pipe(less())
+  .pipe(gulp.dest(destDirCss))
 
 gulp.task 'test', (done) ->
   buildTests(false)
@@ -83,9 +84,15 @@ gulp.task 'tdd', (done) ->
   return # Since this is async
 
 
-gulp.task 'dist', -> build(false)
-gulp.task 'watch', -> build(true)
-gulp.task 'serve', ->
+gulp.task 'dist',["style"], -> build(false)
+
+gulp.task 'watch', ->
+  build(true)
+  gulp.watch 'src/**/{*.coffee, *.cjsx}', ['tdd']
+  gulp.watch 'test/**/{*.js, *.coffee}', ['tdd']
+  gulp.watch 'style/**/{*.less, *.css}', ['styles']
+
+gulp.task 'serve', ['watch'], ->
   build(true)
   config = webserver
     port: process.env['PORT'] or undefined
