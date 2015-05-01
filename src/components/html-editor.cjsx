@@ -11,8 +11,7 @@ module.exports = React.createClass
   mixins: [KatexMixin]
 
   getInitialState: ->
-    objects:
-      editor: null
+    html: ''
 
   initializeEditor: ->
     editor = new Quill(@refs.editorRoot.getDOMNode(), theme: 'snow')
@@ -40,11 +39,11 @@ module.exports = React.createClass
     editor.on 'selection-change', =>
       MOST_RECENTLY_FOCUSED = editor
 
-  componentDidMount: -> @initializeEditor()
-  componentDidUpdate: -> @initializeEditor()
-
-  componentWillReceiveProps: (newprops) ->
-    @state.objects.editor.setHTML(newprops.html)
+  # componentDidMount: -> @initializeEditor()
+  # componentDidUpdate: -> @initializeEditor()
+  #
+  # componentWillReceiveProps: (newprops) ->
+  #   @state.objects.editor.setHTML(newprops.html)
 
   leakedGetHtml: ->
     if @state.objects.editor.getText().trim().length is 0
@@ -55,4 +54,14 @@ module.exports = React.createClass
       html
 
   render: ->
-    <div className="quill-wrapper" ref="editorRoot" />
+    # <div className="quill-wrapper" ref="editorRoot" />
+    <textarea ref='textarea'
+      defaultValue={@props.html}
+      onBlur={@onChange} />
+
+  onChange: ->
+    node = @refs.textarea.getDOMNode()
+    html = node.value
+    unless html is @props.html
+      @props.onChange ->
+        html
