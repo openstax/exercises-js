@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDom = require 'react-dom'
 
 {AnswerActions, AnswerStore} = require './stores/answer'
 {QuestionActions, QuestionStore} = require './stores/answer'
@@ -38,6 +39,6 @@ loadApp = ->
     }
 
   exercise = window.ExerciseComponent(config)
-  window.React.render(exercise, root)
+  ReactDom.render(exercise, root)
 
 document.addEventListener('DOMContentLoaded', loadApp)
