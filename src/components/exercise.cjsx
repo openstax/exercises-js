@@ -1,34 +1,25 @@
 # @csx React.DOM
 React = require 'react'
 _ = require 'underscore'
+{connect} = require 'react-redux'
+
 BS = require 'react-bootstrap'
 Question = require './question'
 Preview = require './preview'
 ExerciseTags = require './tags'
-{ExerciseActions, ExerciseStore} = require '../stores/exercise'
-Attachment = require './attachment'
-AttachmentChooser = require './attachment-chooser'
+Attachments = require './attachments'
 {ArbitraryHtmlAndMath} = require 'openstax-react-components'
 AsyncButton = require 'openstax-react-components/src/components/buttons/async-button.cjsx'
+{Actions} = require '../actions/exercise'
 
-module.exports = React.createClass
+Exercise = React.createClass
   displayName: 'Exercise'
 
-  getInitialState: -> {}
+  componentWillMount: -> @props.dispatch(Actions.load(@props.id))
 
-  componentWillMount: ->
-    if (not @props.id)
-      @setState({
-        id: prompt('Enter exercise id:')
-      })
-    ExerciseStore.addChangeListener(@update)
+  updateStimulus: (event) -> Actions.updateStimulus(@getId(), event.target?.value)
 
-  update: -> @setState({})
-  updateNumber: (event) -> ExerciseActions.updateNumber(@getId(), event.target?.value)
-  updateStimulus: (event) -> ExerciseActions.updateStimulus(@getId(), event.target?.value)
-
-  getId: ->
-    @props.id or @state.id
+  getId: -> @props.id
 
   getDraftId: (id) ->
     draftId = if id.indexOf("@") is -1 then id else id.split("@")[0]
@@ -36,13 +27,12 @@ module.exports = React.createClass
 
   saveExercise: ->
     if confirm('Are you sure you want to save?')
-
-      ExerciseActions.save(@getId())
+      @props.dispatch(Actions.save(@getId()))
 
   publishExercise: ->
     if confirm('Are you sure you want to publish?')
-      ExerciseActions.save(@getId())
-      ExerciseActions.publish(@getId())
+      @props.dispatch(Actions.save(@getId()))
+      @props.dispatch(Actions.publish(@getId()))
 
   renderLoading: ->
     <div>Loading exercise: {@getId()}</div>
@@ -50,35 +40,33 @@ module.exports = React.createClass
   renderFailed: ->
     <div>Failed loading exercise, please check id</div>
 
-  sync: -> ExerciseActions.sync(@getId())
-
   renderForm: ->
     id = @getId()
 
     questions = []
-    for question in ExerciseStore.getQuestions(id)
-      questions.push(<Question key={question.id} sync={@sync} id={question.id} />)
+    for question in @props.exercise.questions
+      questions.push(<Question key={question} sync={@sync} id={question} />)
 
-    isWorking = ExerciseStore.isSaving(id) or ExerciseStore.isPublishing(id)
+    isWorking = @props.viewState.saving or @props.viewState.publishing
 
-    if not ExerciseStore.isPublished(id)
+    if not @props.exercise.published_at
       publishButton = <AsyncButton
         bsStyle='primary'
         onClick={@publishExercise}
         disabled={isWorking}
-        isWaiting={ExerciseStore.isPublishing(id)}
+        isWaiting={@props.viewState.publishing}
         waitingText='Publishing...'
-        isFailed={ExerciseStore.isFailed(id)}
+        isFailed={@props.viewState.failed}
         >
         Publish
       </AsyncButton>
 
     <div>
       <div>
-        <label>Exercise Number</label>: {ExerciseStore.getNumber(id)}
+        <label>Exercise Number</label>: {@props.exercise.number}
       </div><div>
         <label>Exercise Stimulus</label>
-        <textarea onChange={@updateStimulus} defaultValue={ExerciseStore.getStimulus(id)}>
+        <textarea onChange={@updateStimulus} defaultValue={@props.exercise.stimulus_html}>
         </textarea>
       </div>
       {questions}
@@ -87,9 +75,9 @@ module.exports = React.createClass
         bsStyle='info'
         onClick={@saveExercise}
         disabled={isWorking}
-        isWaiting={ExerciseStore.isSaving(id)}
+        isWaiting={@props.viewState.saving}
         waitingText='Saving...'
-        isFailed={ExerciseStore.isFailed(id)}
+        isFailed={@props.viewState.failed}
         >
         Save
       </AsyncButton>
@@ -98,21 +86,20 @@ module.exports = React.createClass
 
   render: ->
     id = @getId()
-    if not ExerciseStore.get(id) and not ExerciseStore.isFailed(id)
-      if not ExerciseStore.isLoading(id) then ExerciseActions.load(id)
+    if !@props.exercise and !@props.viewState.failed
       return @renderLoading()
-    else if ExerciseStore.isFailed(id)
+    else if @props.viewState.failed
       return @renderFailed()
 
-    exercise = ExerciseStore.get(id)
+    exercise = @props.exercise
+    exerciseUid = exercise.uid
 
-    exerciseUid = ExerciseStore.getId(id)
-    preview = <Preview exercise={exercise} closePreview={@closePreview}/>
+    preview = <Preview />
 
-    if ExerciseStore.isPublished(id)
+    if exercise.published_at
       publishedLabel =
         <div>
-          <label>Published: {ExerciseStore.getPublishedDate(id)}</label>
+          <label>Published: {exercise.published_at}</label>
         </div>
       editLink =
         <div>
@@ -122,11 +109,7 @@ module.exports = React.createClass
       form = @renderForm(id)
 
     <BS.Grid>
-      <div className="attachments">
-        { for attachment in ExerciseStore.get(id).attachments
-          <Attachment key={attachment.asset.url} exerciseUid={exerciseUid} attachment={attachment} /> }
-        <AttachmentChooser exerciseUid={exerciseUid} />
-      </div>
+      <Attachments />
 
       <BS.Row><BS.Col xs={5} className="exercise-editor">
         <div>
@@ -139,3 +122,10 @@ module.exports = React.createClass
         {preview}
       </BS.Col></BS.Row>
     </BS.Grid>
+
+mapStateToProps = (state) ->
+  return _.extend({}, state, {
+    id: state.viewState?.id
+  })
+
+module.exports = connect(mapStateToProps)(Exercise)

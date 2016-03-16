@@ -1,23 +1,22 @@
 React = require 'react'
 _ = require 'underscore'
-{AnswerActions, AnswerStore} = require '../stores/answer'
+{ connect } = require 'react-redux'
+Actions = require '../actions/answer'
+AnswerHelper = require '../helpers/answer'
 
-module.exports = React.createClass
+Answer = React.createClass
   displayName: 'Answer'
 
   getInitialState: -> {}
 
   updateContent: (event) ->
-    AnswerActions.updateContent(@props.id, event.target?.value)
-    @props.sync()
+    @props.dispatch(Actions.updateContent(@props.id, event.target?.value))
 
   changeCorrect: (event) ->
     @props.changeAnswer(@props.id)
-    @props.sync()
 
   updateFeedback: (event) ->
-    AnswerActions.updateFeedback(@props.id, event.target?.value)
-    @props.sync()
+    @props.dispatch(Actions.updateFeedback(@props.id, event.target?.value))
 
   render: ->
     moveUp = <a className="pull-right" onClick={_.partial(@props.moveAnswer, @props.id, 1)}>
@@ -28,7 +27,7 @@ module.exports = React.createClass
       <i className="fa fa-arrow-circle-up" />
     </a> if @props.canMoveDown
 
-    correctClassname = 'correct-answer' if AnswerStore.isCorrect(@props.id)
+    correctClassname = 'correct-answer' if AnswerHelper.isCorrect(@props)
 
     <li className={correctClassname}>
       <p>
@@ -44,9 +43,14 @@ module.exports = React.createClass
         </span>
       </p>
       <label>Answer Content</label>
-      <textarea onChange={@updateContent} defaultValue={AnswerStore.getContent(@props.id)}>
+      <textarea onChange={@updateContent} defaultValue={@props.content_html}>
       </textarea>
       <label>Answer Feedback</label>
-      <textarea onChange={@updateFeedback} defaultValue={AnswerStore.getFeedback(@props.id)}>
+      <textarea onChange={@updateFeedback} defaultValue={@props.feedback_html}>
       </textarea>
     </li>
+
+mapStateToProps = (state, props) ->
+  _.findWhere(state.answers, {id: props.id}) or {}
+
+module.exports = connect(mapStateToProps)(Answer)

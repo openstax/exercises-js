@@ -1,10 +1,12 @@
 React = require 'react'
 _ = require 'underscore'
-classnames = require 'classnames'
 BS = require 'react-bootstrap'
+classnames = require 'classnames'
+{ connect } = require 'react-redux'
+
+{buildExerciseFromState} = require '../helpers/exercise'
 Question = require 'openstax-react-components/src/components/question'
 ArbitraryHtml = require 'openstax-react-components/src/components/html'
-
 
 Preview = React.createClass
 
@@ -22,7 +24,7 @@ Preview = React.createClass
 
   renderQuestions: (question) ->
     feedback_html = _.first(question.collaborator_solutions)?.content_html
-      
+
     if feedback_html
       feedback = <ArbitraryHtml className="free-response" html={feedback_html} />
 
@@ -31,8 +33,9 @@ Preview = React.createClass
     </Question>
 
   render: ->
-    questions = _.map(@props.exercise.questions, @renderQuestions)
+    exercise = buildExerciseFromState(@props)
+    questions = _.map(exercise.questions, @renderQuestions)
 
     <div>{questions}</div>
 
-module.exports = Preview
+module.exports = connect((props) -> props)(Preview)

@@ -1,9 +1,8 @@
 React = require 'react'
 BS = require 'react-bootstrap'
-_ = require 'underscore'
 classnames = require 'classnames'
-api = require '../api'
-{ExerciseActions, ExerciseStore} = require '../stores/exercise'
+{connect} = require 'react-redux'
+{remove} = require '../actions/attachments'
 
 Attachment = React.createClass
 
@@ -19,7 +18,7 @@ Attachment = React.createClass
     }).isRequired
 
   deleteImage: ->
-    ExerciseActions.deleteAttachment(@props.exerciseUid, @props.attachment.id)
+    @props.dispatch(remove(@props.exerciseUid, @props.attachment.id))
 
   render: ->
     # large.url will be null on non-image assets (like PDF)
@@ -35,4 +34,6 @@ Attachment = React.createClass
       <textarea value={copypaste} readOnly className="copypaste" />
     </div>
 
-module.exports = Attachment
+module.exports = connect()(Attachment)
+
+
