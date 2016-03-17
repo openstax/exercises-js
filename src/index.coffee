@@ -3,7 +3,7 @@ ReactDom = require 'react-dom'
 
 MathJaxHelper =  require 'openstax-react-components/src/helpers/mathjax'
 
-App = require './components/App'
+App = require './components/app'
 
 # Just for debugging
 window.React = React

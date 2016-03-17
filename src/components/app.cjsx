@@ -10,7 +10,7 @@ LogMonitor = LogMonitor.default
 Inspector = Inspector.default
 
 {configureDevStore, configureProdStore} = require '../store'
-Exercise = require './Exercise'
+Exercise = require './exercise'
 
 IS_LOCAL = (window.location.port is '8001' or window.__karma__ or window.location.href.indexOf('localhost') isnt -1)
 
