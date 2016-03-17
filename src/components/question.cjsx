@@ -1,57 +1,57 @@
 React = require 'react'
 _ = require 'underscore'
+{ connect } = require 'react-redux'
 
 Answer = require './answer'
-{QuestionActions, QuestionStore} = require '../stores/question'
-{AnswerActions, AnswerStore} = require '../stores/answer'
+QuestionHelper = require '../helpers/question'
+QuestionActions = require '../actions/question'
+AnswerActions = require '../actions/answer'
 
-module.exports = React.createClass
+Question = React.createClass
   displayName: 'Question'
 
   getInitialState: -> {}
 
   changeAnswer: (answerId) ->
-    curAnswer = QuestionStore.getCorrectAnswer(@props.id)
-    QuestionActions.setCorrectAnswer(@props.id, answerId, curAnswer?.id)
-    @props.sync()
+    @props.dispatch(AnswerActions.setCorrect(answerId))
+    @props.dispatch(AnswerActions.setIncorrect(@props.correctAnswerId))
 
   updateStimulus: (event) ->
-    QuestionActions.updateStimulus(@props.id, event.target?.value)
-    @props.sync()
+    @props.dispatch(QuestionActions.updateStimulus(@props.id, event.target?.value))
 
   updateStem: (event) ->
-    QuestionActions.updateStem(@props.id, event.target?.value)
-    @props.sync()
+    @props.dispatch(QuestionActions.updateStem(@props.id, event.target?.value))
 
   updateSolution: (event) ->
-    QuestionActions.updateSolution(@props.id, event.target?.value)
-    @props.sync()
+    @props.dispatch(QuestionActions.updateSolution(@props.id, event.target?.value))
 
   addAnswer: ->
-    QuestionActions.addNewAnswer(@props.id)
-    @props.sync()
+    @props.dispatch(QuestionActions.addAnswer(@props.id, QuestionHelper.newAnswerId()))
 
   removeAnswer:(answerId) ->
-    QuestionActions.removeAnswer(@props.id, answerId)
-    @props.sync()
+    @props.dispatch(QuestionActions.removeAnswer(@props.id, answerId))
 
   moveAnswer: (answerId, direction) ->
-    QuestionActions.moveAnswer(@props.id, answerId, direction)
-    @props.sync()
+    @props.dispatch(QuestionActions.moveAnswer(@props.id, answerId, direction))
 
-  multipleChoiceClicked: (event) -> QuestionActions.toggleMultipleChoiceFormat(@props.id)
-  freeResponseClicked: (event) -> QuestionActions.toggleFreeResponseFormat(@props.id)
-  preserveOrderClicked: (event) -> QuestionActions.togglePreserveOrder(@props.id)
+  multipleChoiceClicked: (event) ->
+    @props.dispatch(QuestionActions.toggleMultipleChoiceFormat(@props.id))
+
+  freeResponseClicked: (event) ->
+    @props.dispatch(QuestionActions.toggleFreeResponseFormat(@props.id))
+
+  preserveOrderClicked: (event) ->
+    @props.dispatch(QuestionActions.togglePreserveOrder(@props.id))
 
   render: ->
     {id} = @props
     answers = []
 
-    for answer, index in QuestionStore.getAnswers(id)
-      answers.push(<Answer key={answer.id} 
+    for answer, index in @props.answers
+      answers.push(<Answer key={answer}
         sync={@props.sync}
-        id={answer.id}
-        canMoveUp={index isnt QuestionStore.getAnswers(id).length - 1}
+        id={answer}
+        canMoveUp={index isnt @props.answers.length - 1}
         canMoveDown={index isnt 0}
         moveAnswer={@moveAnswer}
         removeAnswer={@removeAnswer}
@@ -60,11 +60,11 @@ module.exports = React.createClass
     <div>
       <div>
         <label>Question Stem</label>
-        <textarea onChange={@updateStem} defaultValue={QuestionStore.getStem(id)}></textarea>
+        <textarea onChange={@updateStem} defaultValue={@props.stem_html}></textarea>
       </div>
       <div>
         <label>Question Stimulus</label>
-        <textarea onChange={@updateStimulus} defaultValue={QuestionStore.getStimulus(id)}></textarea>
+        <textarea onChange={@updateStimulus} defaultValue={@props.stimulus_html}></textarea>
       </div>
       <div>
         <label>Question Formats</label>
@@ -73,19 +73,21 @@ module.exports = React.createClass
         <input onChange={@multipleChoiceClicked}
           id="multipleChoiceFormat#{id}"
           type="checkbox"
-          defaultChecked={QuestionStore.isMultipleChoice(id)} />
+          defaultChecked={QuestionHelper.isMultipleChoice(@props)} />
         <label htmlFor="multipleChoiceFormat#{id}">Multiple Choice</label>
       </div>
       <div>
         <input onChange={@freeResponseClicked}
           id="freeResponseFormat#{id}"
           type="checkbox"
-          defaultChecked={QuestionStore.isFreeResponse(id)} />
+          defaultChecked={QuestionHelper.isFreeResponse(@props)} />
         <label htmlFor="freeResponseFormat#{id}">Free Response</label>
       </div>
       <div>
         <label>Detailed Solution</label>
-        <textarea onChange={@updateSolution} defaultValue={QuestionStore.getSolution(id)}></textarea>
+        <textarea onChange={@updateSolution}
+          defaultValue={QuestionHelper.getSolution(@props)}>
+        </textarea>
       </div>
       <div>
         <label>
@@ -96,7 +98,7 @@ module.exports = React.createClass
           <input onChange={@preserveOrderClicked}
             id="preserveOrder#{id}"
             type="checkbox"
-            defaultChecked={QuestionStore.isOrderPreserved(id)} />
+            defaultChecked={@props.is_answer_order_important} />
           <label htmlFor="preserveOrder#{id}">Preserve Answer Orders</label>
         </p>
         <ol>
@@ -104,3 +106,14 @@ module.exports = React.createClass
         </ol>
       </div>
     </div>
+
+mapStateToProps = (state, props) ->
+  question = _.findWhere(state.questions, {id: props.id})
+  answers = _.map(question.answers, (answer) ->
+    _.findWhere(state.answers, {id: answer}))
+
+  correctAnswer = _.findWhere(answers, {correctness: "1.0"})
+
+  _.extend({}, question, {correctAnswerId: correctAnswer?.id})
+
+module.exports = connect(mapStateToProps)(Question)

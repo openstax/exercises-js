@@ -2,8 +2,8 @@ React = require 'react'
 BS = require 'react-bootstrap'
 _ = require 'underscore'
 classnames = require 'classnames'
-api = require '../api'
-{ExerciseActions, ExerciseStore} = require '../stores/exercise'
+{connect} = require 'react-redux'
+{attachmentUploaded, uploadExerciseImage} = require '../actions/attachments'
 
 AttachmentChooser = React.createClass
 
@@ -18,11 +18,12 @@ AttachmentChooser = React.createClass
     if status.progress?
       @setState(progress: status.progress, error: false)
     if status.response # 100%, we're done
+      @props.dispatch(attachmentUploaded(status.response))
       @replaceState({}) # <- N.B. replaceState, not setState.
 
   uploadImage: ->
     return unless @state.file
-    api.uploadExerciseImage(@props.exerciseUid, @state.file, @updateUploadStatus)
+    uploadExerciseImage(@props.exerciseUid, @state.file, @updateUploadStatus)
     @setState(progress: 0)
 
   renderUploadStatus: ->
@@ -64,4 +65,4 @@ AttachmentChooser = React.createClass
       {@renderUploadStatus()}
     </div>
 
-module.exports = AttachmentChooser
+module.exports = connect()(AttachmentChooser)
