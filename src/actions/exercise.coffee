@@ -24,8 +24,8 @@ Actions =
       request
         url: "/api/exercises/#{id}@draft"
         method: 'GET'
-        success: (data) => dispatch(loadedExercise(data))
-        fail: (data) => dispatch(errorLoadExercise(data))
+        success: (data) -> dispatch(loadedExercise(data))
+        fail: (data) -> dispatch(errorLoadExercise(data))
 
   save: (id) ->
     (dispatch, getState) ->
@@ -37,8 +37,8 @@ Actions =
         url:"/api/exercises/#{id}@draft"
         method: 'PUT'
         payload: data
-        success: (data) => dispatch(loadedExercise(data))
-        fail: (data) => dispatch(errorSavedExercise(data))
+        success: (data) -> dispatch(loadedExercise(data))
+        fail: (data) -> dispatch(errorSavedExercise(data))
 
   publish: (id) ->
     (dispatch, getState) ->
@@ -50,7 +50,7 @@ Actions =
         url: "/api/exercises/#{uid}/publish"
         method: 'PUT'
         payload: exercise
-        success: (data) => dispatch(loadedExercise(data))
-        fail: (data) => dispatch(errorPublishExercise(data))
+        success: (data) -> dispatch(loadedExercise(data))
+        fail: (data) -> dispatch(errorPublishExercise(data))
 
 module.exports = {Actions}

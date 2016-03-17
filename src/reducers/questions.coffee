@@ -63,7 +63,7 @@ QuestionReducer = (state = [], {type: action, payload}) ->
 
   else if action is Constants.TOGGLE_PRESERVE_ORDER
 
-    return _.extend({}, state, {is_answer_order_important: !state.is_answer_order_important})
+    return _.extend({}, state, {is_answer_order_important: not state.is_answer_order_important})
 
   else
 

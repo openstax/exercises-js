@@ -32,7 +32,7 @@ else
 
 
 App = React.createClass
-	render: ->
+  render: ->
     devTools = @renderDevTools()
     <Provider store={store}>
       <div>

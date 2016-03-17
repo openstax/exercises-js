@@ -22,9 +22,9 @@ module.exports = AnswersReducer = (state = [], {type: action, payload}) ->
 
   else if (action is Constants.EXERCISE_LOADED)
     return _.chain(payload.questions)
-             .map((question) -> return question.answers)
-             .flatten()
-             .value()
+    .map((question) -> return question.answers)
+    .flatten()
+    .value()
 
   else if (action is Constants.ADD_ANSWER)
     return state.concat([

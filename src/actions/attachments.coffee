@@ -33,7 +33,7 @@ remove = (exerciseUid, attachmentId) ->
     request
       url: "/api/exercises/#{exerciseUid}/attachments/#{attachmentId}"
       method: 'DELETE'
-      success: => dispatch(deletedAttachment(attachmentId))
-      fail: => dispatch(errorDeleteAttachment(attachmentId))
+      success: -> dispatch(deletedAttachment(attachmentId))
+      fail: -> dispatch(errorDeleteAttachment(attachmentId))
 
 module.exports = {uploadExerciseImage, attachmentUploaded, remove}

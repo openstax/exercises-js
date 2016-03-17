@@ -86,7 +86,7 @@ Exercise = React.createClass
 
   render: ->
     id = @getId()
-    if !@props.exercise and !@props.viewState.failed
+    if not @props.exercise and not @props.viewState.failed
       return @renderLoading()
     else if @props.viewState.failed
       return @renderFailed()

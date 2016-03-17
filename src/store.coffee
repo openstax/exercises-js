@@ -13,7 +13,7 @@ configureDevStore = (instrument) ->
     )
   )
 
-configureProdStore = () ->
+configureProdStore = ->
   createStore(
     reducer,
     INITIAL_STATE,

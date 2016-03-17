@@ -7,7 +7,7 @@ Attachment = require './attachment'
 AttachmentChooser = require './attachment-chooser'
 
 Attachments = React.createClass
-  render:() ->
+  render: ->
     <div className="attachments">
       { for attachment in @props.attachments
         <Attachment key={attachment.asset.url} exerciseUid={@props.id} attachment={attachment} /> }
