@@ -6,7 +6,7 @@ INITIAL_STATE =
   editable: [],
   fixed: []
 
-module.exports = (state = INITIAL_STATE, {type:action, payload}) ->
+reducer = (state = INITIAL_STATE, {type:action, payload}) ->
   if action is Constants.EXERCISE_LOAD
 
     return INITIAL_STATE
@@ -30,3 +30,5 @@ module.exports = (state = INITIAL_STATE, {type:action, payload}) ->
     return _.extend({}, state, {editable: payload.tags})
 
   return state
+
+module.exports = {INITIAL_STATE, reducer}

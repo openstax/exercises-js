@@ -1,7 +1,18 @@
 _ = require 'underscore'
 Constants = require '../actions/constants'
 
-module.exports = (state = null, {type: action, payload}) ->
+INITIAL_STATE =
+  editors: []
+  authors: []
+  copyright_holders: []
+  derived_from: []
+  stimulus_html: ""
+  questions: []
+  published_at: null
+  number: ""
+  uid: ""
+
+reducer = (state = INITIAL_STATE, {type: action, payload}) ->
 
   if (action is Constants.EXERCISE_LOAD or
   action is Constants.ERROR_LOAD_EXERCISE or
@@ -21,5 +32,7 @@ module.exports = (state = null, {type: action, payload}) ->
       published_at: payload.published_at
       stimulus_html: payload.stimulus_html
     }
+
   return state
 
+module.exports = {reducer, INITIAL_STATE}

@@ -1,6 +1,8 @@
 
 Constants = require '../actions/constants'
-module.exports = (state = [], {type:action, payload}) ->
+INITIAL_STATE = []
+
+reducer = (state = INITIAL_STATE, {type:action, payload}) ->
 
   if action is Constants.EXERCISE_LOAD
     return []
@@ -12,3 +14,6 @@ module.exports = (state = [], {type:action, payload}) ->
     return state.filter((attachment) -> attachment.id isnt payload.id)
 
   return state
+
+
+module.exports = {reducer, INITIAL_STATE}

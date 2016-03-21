@@ -9,26 +9,23 @@ questions = require './questions'
 answers = require './answers'
 attachments = require './attachments'
 
-path = window.location.pathname.split("/")
 
 INITIAL_STATE =
-  viewState:
-    loading: false
-    saving: false
-    publishing: false
-    failed: false
-    error: null
-    id: if path.length > 2 then path[2] else prompt('Enter exercise id')
-
-  exercise: null
-  questions: []
-  answers: []
-  tags:
-    editable: [],
-    fixed: []
-  attachments: []
+  viewState: viewState.INITIAL_STATE
+  exercise: exercise.INITIAL_STATE
+  questions: questions.INITIAL_STATE
+  answers: answers.INITIAL_STATE
+  tags: tags.INITIAL_STATE
+  attachments: attachments.INITIAL_STATE
 
 
-reducer = combineReducers({exercise, viewState, tags, attachments, questions, answers})
+reducer = combineReducers(
+  exercise: exercise.reducer,
+  viewState: viewState.reducer,
+  tags: tags.reducer,
+  attachments: attachments.reducer,
+  questions: questions.reducer,
+  answers: answers.reducer
+)
 module.exports = {reducer, INITIAL_STATE}
 

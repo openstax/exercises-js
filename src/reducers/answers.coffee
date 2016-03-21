@@ -1,22 +1,10 @@
 _ = require 'underscore'
 Constants = require '../actions/constants'
+Answer = require './answer'
 
-AnswerReducer = (state = {}, {type: action, payload}) ->
-  if state.id isnt payload?.id then return state
+INITIAL_STATE = [Answer.INITIAL_STATE]
 
-  if action is Constants.UPDATE_ANSWER_FEEDBACK
-    return _.extend({}, state, {feedback_html: payload.feedback_html})
-  else if action is Constants.UPDATE_ANSWER_CONTENT
-    return _.extend({}, state, {content_html: payload.content_html})
-  else if action is Constants.SET_CORRECT
-    return _.extend({}, state, {correctness: "1.0"})
-  else if action is Constants.SET_INCORRECT
-    return _.extend({}, state, {correctness: "0.0"})
-
-  return state
-
-
-module.exports = AnswersReducer = (state = [], {type: action, payload}) ->
+reducer = (state = INITIAL_STATE, {type: action, payload}) ->
   if action is Constants.EXERCISE_LOAD
     return []
 
@@ -42,6 +30,8 @@ module.exports = AnswersReducer = (state = [], {type: action, payload}) ->
   action is Constants.SET_CORRECT)
 
     return _.map state, (answer) ->
-      AnswerReducer(answer, {payload, type: action})
+      Answer.reducer(answer, {payload, type: action})
 
   return state
+
+module.exports = {reducer, INITIAL_STATE}
