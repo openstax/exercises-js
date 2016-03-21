@@ -5,12 +5,13 @@ LogMonitor = require 'redux-devtools-log-monitor'
 DockMonitor = require 'redux-devtools-dock-monitor'
 Inspector = require 'redux-devtools-inspector'
 
+{ Exercise } = require './exercise'
+
 DockMonitor = DockMonitor.default
 LogMonitor = LogMonitor.default
 Inspector = Inspector.default
 
 {configureDevStore, configureProdStore} = require '../store'
-Exercise = require './exercise'
 
 IS_LOCAL = (window.location.port is '8001' or window.__karma__ or window.location.href.indexOf('localhost') isnt -1)
 

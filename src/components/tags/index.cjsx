@@ -1,7 +1,7 @@
 React = require 'react'
 BS = require 'react-bootstrap'
 _ = require 'underscore'
-{updateEditable, updateFixed} = require '../actions/tags'
+{updateEditable, updateFixed} = require '../../actions/tags'
 { connect } = require 'react-redux'
 
 FixedTag = React.createClass

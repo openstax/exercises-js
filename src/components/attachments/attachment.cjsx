@@ -2,7 +2,7 @@ React = require 'react'
 BS = require 'react-bootstrap'
 classnames = require 'classnames'
 {connect} = require 'react-redux'
-{remove} = require '../actions/attachments'
+{remove} = require '../../actions/attachments'
 
 Attachment = React.createClass
 

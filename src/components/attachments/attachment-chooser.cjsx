@@ -3,7 +3,7 @@ BS = require 'react-bootstrap'
 _ = require 'underscore'
 classnames = require 'classnames'
 {connect} = require 'react-redux'
-{attachmentUploaded, uploadExerciseImage} = require '../actions/attachments'
+{attachmentUploaded, uploadExerciseImage} = require '../../actions/attachments'
 
 AttachmentChooser = React.createClass
 

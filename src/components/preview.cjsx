@@ -2,7 +2,7 @@ React = require 'react'
 _ = require 'underscore'
 BS = require 'react-bootstrap'
 classnames = require 'classnames'
-{ connect } = require 'react-redux'
+{ contain } = require '../containers/exercise'
 
 {buildExerciseFromState} = require '../helpers/exercise'
 Question = require 'openstax-react-components/src/components/question'
@@ -38,4 +38,4 @@ Preview = React.createClass
 
     <div>{questions}</div>
 
-module.exports = connect((props) -> props)(Preview)
+module.exports = {Preview: contain(Preview), Component: Preview}
