@@ -77,6 +77,34 @@ ExerciseConfig = {
 
     @_change(id, {tags})
 
+  addBlankPrefixedTag: (id, {prefix}) ->
+    prefix += ':'
+    tags = _.clone( @_get(id).tags )
+    unless 0 is tags.indexOf(prefix) # is there already a blank one?
+      tags.push(prefix)
+      @_change(id, {tags})
+
+
+  # these may not be needed
+  #
+  # removeTag: (id, badTag) ->
+  #   tags = @_get(id).tags
+  #   cleanedTags = _.without(tags, badTag)
+  #   @_change(id, {tags: cleanedTags}) if cleanedTags.length isnt tags.length
+
+  # addTag: (id, tag) ->
+  #   tags = @_get(id).tags
+  #   tags.push(tag)
+  #   console.log "Added: #{tags}"
+  #   @_change(id, {tags})
+
+  setPrefixedTag: (id, {prefix, tag, previous}) ->
+    prefix += ':'
+    tags = _.without(@_get(id).tags, prefix + previous)
+    if tag
+      tags.push(prefix + tag)
+    @_change(id, {tags})
+
   sync: (id) ->
     questions = _.map @_local[id].questions, (question) ->
       QuestionActions.syncAnswers(question.id)
@@ -104,9 +132,15 @@ ExerciseConfig = {
     exercise.attachments = _.reject exercise.attachments, (attachment) -> attachment.id is attachmentId
     @emitChange()
 
+  addQuestionPart: (id) ->
+    @_local[id].questions.push({})
+
+    @emitChange()
+
 
   attachmentUploaded: (uid, attachment) ->
     exercise = _.findWhere(@_local, {uid})
+    exercise.attachments ||= []
     exercise.attachments.push(attachment)
     @emitChange()
 
@@ -129,6 +163,11 @@ ExerciseConfig = {
 
     isPublishing: (id) -> !!@_asyncStatusPublish[id]
 
+    getTagsWithPrefix: (id, prefix) ->
+      prefix += ':'
+      tags = _.select @_get(id).tags, (tag) -> 0 is tag.indexOf(prefix)
+      _.map tags, (tag) -> tag.replace(/^[\w\-]+:/, '')
+
     getTemplate: (id) ->
       questionId = QuestionStore.freshLocalId()
 
@@ -144,6 +183,7 @@ ExerciseConfig = {
         valid: memo.valid and validity.valid
         reason: memo.reason or validity.reason
       , valid: true
+
 }
 
 extendConfig(ExerciseConfig, new CrudConfig())

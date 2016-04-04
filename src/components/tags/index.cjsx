@@ -1,7 +1,11 @@
 React = require 'react'
 BS = require 'react-bootstrap'
 _ = require 'underscore'
-{ExerciseActions, ExerciseStore} = require '../stores/exercise'
+{ExerciseActions, ExerciseStore} = require '../../stores/exercise'
+
+BookTags = require './books'
+
+LoTag = require './lo'
 
 FixedTag = React.createClass
   updateTag: (event) ->
@@ -18,8 +22,9 @@ FixedTag = React.createClass
       {_.map(@props.range, @renderRangeValue)}
     </select>
 
-module.exports = React.createClass
-  displayName: 'ExerciseTags'
+ExerciseTags = React.createClass
+  propTypes:
+    exerciseId: React.PropTypes.string.isRequired
 
   updateTags: (event) ->
     tagsArray = event.target?.value.split("\n")
@@ -31,15 +36,23 @@ module.exports = React.createClass
   render: ->
     {id} = @props
 
-    fixed = _.map(ExerciseStore.getFixedTags(id), @renderFixedTag)
+    # fixed = _.map(ExerciseStore.getFixedTags(id), @renderFixedTag)
+    #   <p><label>Tags</label></p>
+    #   <BS.Col xs={6}>
+    #     <textarea onChange={@updateTags} defaultValue={ExerciseStore.getEditableTags(id).join('\n')}>
+    #     </textarea>
+    #   </BS.Col>
+    #   <BS.Col xs={6}>
+    #     {fixed}
+    #   </BS.Col>
 
-    <BS.Row className="tags">
-      <p><label>Tags</label></p>
-      <BS.Col xs={6}>
-        <textarea onChange={@updateTags} defaultValue={ExerciseStore.getEditableTags(id).join('\n')}>
-        </textarea>
-      </BS.Col>
-      <BS.Col xs={6}>
-        {fixed}
-      </BS.Col>
-    </BS.Row>
+    <div className="tags">
+
+      <BS.Row>
+        <BookTags {...@props} />
+        <LoTag {...@props} />
+      </BS.Row>
+    </div>
+
+
+module.exports = ExerciseTags
