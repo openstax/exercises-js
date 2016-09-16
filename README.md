@@ -1,27 +1,7 @@
-# exercises-js [![Build Status](https://travis-ci.org/openstax/exercises-js.svg?branch=master)](https://travis-ci.org/openstax/exercises-js) [![devDependency Status](https://david-dm.org/openstax/exercises-js/dev-status.svg)](https://david-dm.org/openstax/exercises-js#info=devDependencies)
+# DEPRECATED
 
-# Development Instructions
+This repository is deprecated and no further activity should take place.
 
-```sh
-npm install -g gulp
-npm install
-bower install
-```
-
-To build a dist file:
-
-```sh
-gulp dist
-```
-
-To run tests:
-
-```sh
-npm test  # Or gulp test
-```
-
-To continuously run tests:
-
-```sh
-gulp tdd
-```
+All code and history [has been moved](https://github.com/openstax/tutor-js/pull/1238)
+into a sub directory of the main Tutor JS repository and can now be found
+at: https://github.com/openstax/tutor-js/tree/master/exercises
